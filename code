@@ -2,7 +2,6 @@ import os
 import shutil
 # вывести текущую директорию
 print("Текущая деректория:", os.getcwd())
-pip install pysimplegui
 def up(g):
     os.chdir(g)
 def createfol(g): # создать пустой каталог (папку)
@@ -19,6 +18,9 @@ def moveto(g,g1):
 def copy(g,g1):
   shutil.copy2(g,g1) #'/src/dir/file.ext', '/dst/dir/newname.ext' пример ввода
 import PySimpleGUI as sg
+
+pip install pysimplegui
+
 layout = [[sg.Text('1)create-создание папки')],
           [sg.Text('2)delete-удаление папки')],
           [sg.Text('3)up-открыть папку')],
@@ -34,7 +36,7 @@ window = sg.Window('REALLY EASY FILE МАНАГЕР', layout)
 while True:                             # The Event Loop
     events,k = window.read()
     print(events, k[0]) #debug
-    if events in (None, 'Закрыть'):
+    if events == 'Закрыть':
         break
     if (k[0]=='create'):
         layout = [[sg.Text('Введите имя создаваемой папки'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
@@ -89,24 +91,24 @@ while True:                             # The Event Loop
         layout = [[sg.Text('Введите имя изменяемого файла'), sg.InputText()],[sg.Text('Введите новое имя изменяемого файла'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
         window = sg.Window('RENAME', layout)
         while True:                             # The Event Loop
-            events7,f5,f6 = window.read()
+            events7,f5 = window.read()
             if events7 in (None, 'Закрыть'):
                 break
-            rename(f5[0],f6[0])
+            rename(f5[0],f5[1])
     if (k[0]=='moveto'):
         layout = [[sg.Text('Введите имя перемещаемого файла'), sg.InputText()],[sg.Text('Введите новый каталог для файла'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
         window = sg.Window('MOVETO', layout)
         while True:                             # The Event Loop
-            events8,f7,f8 = window.read()
+            events8,f7 = window.read()
             if events8 in (None, 'Закрыть'):
                 break
-            moveto(f7[0],f8[0])
+            print(f7[0],f7[1])
+            moveto(f7[0],f7[1])
     if (k[0]=='copyto'):
         layout = [[sg.Text('Введите имя копируемого файла(Пример /src/dir/file.ext) '), sg.InputText()],[sg.Text('Введите новый каталог для копируемого файла (Пример /dst/dir/newname.ext)'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
         window = sg.Window('COPYTO', layout)
         while True:                             # The Event Loop
-            events9,f9,f10 = window.read()
+            events9,f9 = window.read()
             if events9 in (None, 'Закрыть'):
                 break
-            copyto(f9[0],f10[0])
-    
+            copyto(f9[0],f9[1])
