@@ -1,0 +1,112 @@
+import os
+import shutil
+# вывести текущую директорию
+print("Текущая деректория:", os.getcwd())
+pip install pysimplegui
+def up(g):
+    os.chdir(g)
+def createfol(g): # создать пустой каталог (папку)
+    os.mkdir(g)
+def filecreate(g):
+    text_file = open(g,"w")
+def filedelete(g):
+    g=str(g)
+    os.remove(g)
+def rename(g,g1):
+  os.rename(g,g1)
+def moveto(g,g1):
+  os.replace(g, g1) #g1 должна быть вида "folder/renamed-text.txt"
+def copy(g,g1):
+  shutil.copy2(g,g1) #'/src/dir/file.ext', '/dst/dir/newname.ext' пример ввода
+import PySimpleGUI as sg
+layout = [[sg.Text('1)create-создание папки')],
+          [sg.Text('2)delete-удаление папки')],
+          [sg.Text('3)up-открыть папку')],
+          [sg.Text('4)filecreate-создание файла внутри папки')],
+          [sg.Text('5)check-проверить содержимое папки')],
+          [sg.Text('6)deletefile-удаление файлов внутри папки')],
+          [sg.Text('7)copyto-скопировать файл в другую папку')],
+          [sg.Text('8)moveto-переместить файл в другую папку')],
+          [sg.Text('9)rename-переименовать файл внутри папки')],
+          [sg.Text('Поле ввода'), sg.InputText()],
+          [sg.Button('Выполнить'), sg.Button('Закрыть')]]
+window = sg.Window('REALLY EASY FILE МАНАГЕР', layout)
+while True:                             # The Event Loop
+    events,k = window.read()
+    print(events, k[0]) #debug
+    if events in (None, 'Закрыть'):
+        break
+    if (k[0]=='create'):
+        layout = [[sg.Text('Введите имя создаваемой папки'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
+        window = sg.Window('CREATE', layout)
+        while True:                             # The Event Loop
+            events1,f = window.read()
+            if events1 in (None, 'Закрыть'):
+                break
+            createfol(f[0])
+    if(k[0]=='delete'):
+        layout = [[sg.Text('Введите имя удаляемой папки'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
+        window = sg.Window('DELETE', layout)
+        while True:                             # The Event Loop
+            events2,f3 = window.read()
+            if events2 in (None, 'Закрыть'):
+                break
+            f3[0]=str(f3[0])
+            os.rmdir(f3[0])
+    if(k=='up'):
+        layout = [[sg.Text('Введите имя папки перемещения'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
+        window = sg.Window('UP', layout)
+        while True:                             # The Event Loop
+            events3,f1 = window.read()
+            if events3 in (None, 'Закрыть'):
+                break
+            up(f1[0])
+    if(k=='filecreate'):
+        layout = [[sg.Text('Введите имя создаваемого файла'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
+        window = sg.Window('FILECREATE', layout)
+        while True:                             # The Event Loop
+            events4,f2 = window.read()
+            if events4 in (None, 'Закрыть'):
+                break
+            filecreate(f2[0])
+    if(k=='check'):
+        layout = [[sg.Text("Все папки и файлы:", os.listdir()),sg.Button('Закрыть')]]
+        window = sg.Window('ALLFILES', layout)
+        while True:                             # The Event Loop
+            events5 = window.read()
+            if events5 in (None, 'Закрыть'):
+                break
+    if(k=='deletefile'):
+        layout = [[sg.Text('Введите имя удаляемого файла'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
+        window = sg.Window('DELETE', layout)
+        while True:                             # The Event Loop
+            events6,f4 = window.read()
+            if events6 in (None, 'Закрыть'):
+                break
+            f4[0]=str(f4[0])
+            filedelete(f4[0])
+    if (k[0]=='rename'):
+        layout = [[sg.Text('Введите имя изменяемого файла'), sg.InputText()],[sg.Text('Введите новое имя изменяемого файла'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
+        window = sg.Window('RENAME', layout)
+        while True:                             # The Event Loop
+            events7,f5,f6 = window.read()
+            if events7 in (None, 'Закрыть'):
+                break
+            rename(f5[0],f6[0])
+    if (k[0]=='moveto'):
+        layout = [[sg.Text('Введите имя перемещаемого файла'), sg.InputText()],[sg.Text('Введите новый каталог для файла'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
+        window = sg.Window('MOVETO', layout)
+        while True:                             # The Event Loop
+            events8,f7,f8 = window.read()
+            if events8 in (None, 'Закрыть'):
+                break
+            moveto(f7[0],f8[0])
+    if (k[0]=='copyto'):
+        layout = [[sg.Text('Введите имя копируемого файла(Пример /src/dir/file.ext) '), sg.InputText()],[sg.Text('Введите новый каталог для копируемого файла (Пример /dst/dir/newname.ext)'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
+        window = sg.Window('COPYTO', layout)
+        while True:                             # The Event Loop
+            events9,f9,f10 = window.read()
+            if events9 in (None, 'Закрыть'):
+                break
+            copyto(f9[0],f10[0])
+    
