@@ -8,6 +8,10 @@ def createfol(g): # создать пустой каталог (папку)
     os.mkdir(g)
 def filecreate(g):
     text_file = open(g,"w")
+def filewrite(g,g1):
+    f = open(g,'w')  # открытие в режиме записи
+    f.write(g1) 
+    f.close()  # закрытие файла
 def filedelete(g):
     g=str(g)
     os.remove(g)
@@ -15,7 +19,7 @@ def rename(g,g1):
   os.rename(g,g1)
 def moveto(g,g1):
   os.replace(g, g1) #g1 должна быть вида "folder/renamed-text.txt"
-def copy(g,g1):
+def copyto(g,g1):
   shutil.copy2(g,g1) #'/src/dir/file.ext', '/dst/dir/newname.ext' пример ввода
 import PySimpleGUI as sg
 
@@ -30,6 +34,8 @@ layout = [[sg.Text('1)create-создание папки')],
           [sg.Text('7)copyto-скопировать файл в другую папку')],
           [sg.Text('8)moveto-переместить файл в другую папку')],
           [sg.Text('9)rename-переименовать файл внутри папки')],
+          [sg.Text('10)filewrite-запись текста в файл')],
+          [sg.Text('11)fileread-чтение текста файла')],
           [sg.Text('Поле ввода'), sg.InputText()],
           [sg.Button('Выполнить'), sg.Button('Закрыть')]]
 window = sg.Window('REALLY EASY FILE МАНАГЕР', layout)
@@ -55,7 +61,7 @@ while True:                             # The Event Loop
                 break
             f3[0]=str(f3[0])
             os.rmdir(f3[0])
-    if(k=='up'):
+    if(k[0]=='up'):
         layout = [[sg.Text('Введите имя папки перемещения'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
         window = sg.Window('UP', layout)
         while True:                             # The Event Loop
@@ -63,7 +69,7 @@ while True:                             # The Event Loop
             if events3 in (None, 'Закрыть'):
                 break
             up(f1[0])
-    if(k=='filecreate'):
+    if(k[0]=='filecreate'):
         layout = [[sg.Text('Введите имя создаваемого файла'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
         window = sg.Window('FILECREATE', layout)
         while True:                             # The Event Loop
@@ -71,14 +77,10 @@ while True:                             # The Event Loop
             if events4 in (None, 'Закрыть'):
                 break
             filecreate(f2[0])
-    if(k=='check'):
-        layout = [[sg.Text("Все папки и файлы:", os.listdir()),sg.Button('Закрыть')]]
+    if(k[0]=='check'):
+        layout = [[sg.Text("Все папки и файлы:")],[sg.Text(os.listdir())],[sg.Button('Закрыть')]]
         window = sg.Window('ALLFILES', layout)
-        while True:                             # The Event Loop
-            events5 = window.read()
-            if events5 in (None, 'Закрыть'):
-                break
-    if(k=='deletefile'):
+    if(k[0]=='deletefile'):
         layout = [[sg.Text('Введите имя удаляемого файла'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
         window = sg.Window('DELETE', layout)
         while True:                             # The Event Loop
@@ -112,3 +114,25 @@ while True:                             # The Event Loop
             if events9 in (None, 'Закрыть'):
                 break
             copyto(f9[0],f9[1])
+    if(k[0]=='filewrite'):
+        layout = [[sg.Text('Введите имя изменяемого файла'), sg.InputText()],[sg.Text('Введите текст'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
+        window = sg.Window('filewrite', layout)
+        while True:                             # The Event Loop
+            events10,f10 = window.read()
+            if events10 in (None, 'Закрыть'):
+                break
+            filewrite(f10[0],f10[1])
+    if(k[0]=='fileread'):
+        layout = [[sg.Text('Введите имя читаемого файла'), sg.InputText()],[sg.Button('Выполнить'),sg.Button('Закрыть')]]
+        window = sg.Window('fileread', layout)
+        while True:                             # The Event Loop
+            events11,f11 = window.read()
+            if events11 in (None, 'Закрыть'):
+                break
+            f = open(f11[0],'r')  # открытие в режиме записи
+            T=f.read() 
+            layout = [[sg.Text(T)],[sg.Button('Закрыть')]]
+            window = sg.Window('fileread', layout)
+            f.close()  # закрытие файла
+    else:
+        print('Команды не сущ-ет попроббуйте снова')
